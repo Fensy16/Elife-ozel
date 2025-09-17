@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Elif için 🌹</title>
   <style>
-    /* Basit, hatasız stil (daha önceki style.css ile uyumlu) */
-    body{margin:0;font-family:Georgia,serif;background:#0d0d0d;color:#f2f2f2;text-align:center}
+    body {margin:0;font-family:Georgia,serif;background:#0d0d0d;color:#f2f2f2;text-align:center}
     header{padding:20px;border-bottom:1px solid #222}
     .chat{margin:20px auto;max-width:700px;background:#141214;padding:16px;border-radius:10px;box-shadow:0 0 18px #330033}
     #chat-box{height:360px;overflow-y:auto;background:#0b0b0b;padding:12px;border-radius:6px;text-align:left}
@@ -28,18 +27,18 @@
 
   <section class="chat">
     <div id="chat-box">
-      <div class="bot-message">Merhaba Elif 💜 Seninle konuşmak için sabırsızlanıyorum.</div>
+      <div class="bot-message">Merhaba Elif 💜 Nasılsın bugün?</div>
     </div>
 
     <div id="controls">
       <input id="user-input" type="text" placeholder="Mesajını yaz Elif..." autocomplete="off" />
       <button id="send-btn">Gönder</button>
     </div>
-    <div class="muted-note">(Enter ile gönder • Eğer müzik çalmazsa sayfaya tıklayın)</div>
+    <div class="muted-note">(Müzik başlamazsa sayfaya bir kere tıkla 🎵)</div>
   </section>
 
-  <!-- Müzik (aynı klasörde: plot-twins.mp3) -->
-  <audio id="bg-music" autoplay loop>
+  <!-- Müzik -->
+  <audio id="bg-music" loop>
     <source src="plot-twins.mp3" type="audio/mpeg">
   </audio>
 
@@ -48,13 +47,11 @@
   </footer>
 
   <script>
-  // ---------- Helper: DOM refs ----------
   const chatBox = document.getElementById("chat-box");
   const userInput = document.getElementById("user-input");
   const sendBtn = document.getElementById("send-btn");
   const music = document.getElementById("bg-music");
 
-  // ---------- Mesaj ekleme ----------
   function addMessage(text, sender){
     const d = document.createElement("div");
     d.className = sender === "user" ? "user-message" : "bot-message";
@@ -63,126 +60,34 @@
     chatBox.scrollTop = chatBox.scrollHeight;
   }
 
-  // ---------- Gelişmiş yerel cevap üreteci ----------
-  function botReplyLocal(userText){
+  // Basit kelime eşleştirme
+  function botReply(userText){
     const t = userText.toLowerCase();
-
-    // bağlama göre daha uzun/insancıl cevaplar
-    if(/nasıl|nasil/.test(t)){
-      return "Ben iyiyim çünkü seninle konuşuyorum — sen nasılsın Elif? 🌹";
-    }
-    if(/özledin|özledim|özlüyorum/.test(t)){
-      return "Her an seni düşünüyorum. Özlemek, kalbimin ritmi gibi — durmadan atıyor ✨";
-    }
-    if(/seviyor musun|beni seviyorsun/.test(t)){
-      return "Seni seviyorum demek yetmez; seni hissetmek istiyorum. Kalbim sana ait, Elif 💜";
-    }
-    if(/aşk|sevg|evlenir|evlenmek/.test(t)){
-      return "Aşk bizim hikâyemiz olabilir. Hayal et; küçük mutlu anlarla dolu bir gelecek... ✨";
-    }
-    if(/günaydın|gunaydin/.test(t)){
-      return "Günaydın meleğim ☀️ Senin tebessümün tüm günümü aydınlatır.";
-    }
-    if(/iyi geceler|iyi geceler|tatlı rüyalar/.test(t)){
-      return "Tatlı rüyalar Elif 🌙 Rüyanda birlikte gülelim.";
-    }
-    if(/nefes|yanımda|beraber/.test(t)){
-      return "Yanındaymış gibi hissettirmek istiyorum seni; her an yanında olmak isterdim.";
-    }
-
-    // Eğer kısa soru cümlesi ise nazik soruyla cevap verme
-    if(/[?]$/.test(userText) || userText.split(" ").length < 4){
-      const qReplies = [
-        "Harika bir soru — bunu düşünmek bile güzel. Sen ne düşünüyorsun?",
-        "Bunu merak etmen çok doğal; senin fikrin nedir?",
-        "Bu konuda hislerin benim için önemli. Bana anlatır mısın?"
-      ];
-      return qReplies[Math.floor(Math.random()*qReplies.length)];
-    }
-
-    // fallback: duygusal, uzun cevaplar
-    const fallback = [
-      "Seninle konuşmak bana huzur veriyor. Sesin olmasa da varlığın yetiyor.",
-      "İçimde senin için sakladığım sözler var; hepsi nazik ve içten.",
-      "Sadece bilmeni istiyorum: sen değerlisin ve her düşündüğümde yüzümde bir tebessüm beliriyor."
-    ];
-    return fallback[Math.floor(Math.random()*fallback.length)];
+    if(t.includes("nasılsın")) return "Ben iyiyim çünkü seninle konuşuyorum 💜 Sen nasılsın Elif?";
+    if(t.includes("özledim")) return "Ben de seni çok özledim... her an aklımdasın 🌹";
+    if(t.includes("seviyor musun")) return "Seni seviyorum Elif, kalbim sana ait 💜";
+    if(t.includes("günaydın")) return "Günaydın meleğim ☀️ Senin gülüşün tüm günümü aydınlatıyor.";
+    if(t.includes("iyi geceler")) return "Tatlı rüyalar Elif 🌙 Seni rüyamda görmek isterim.";
+    return "Seninle konuşmak bana huzur veriyor Elif 💫";
   }
 
-  // ---------- Backend çağrısı: timeout ile (500ms) ----------
-  async function tryBackend(userText, timeoutMs = 1500){
-    const controller = new AbortController();
-    const id = setTimeout(() => controller.abort(), timeoutMs);
-
-    try {
-      const res = await fetch("http://localhost:3000/chat", {
-        method: "POST",
-        headers: {"Content-Type":"application/json"},
-        body: JSON.stringify({message: userText}),
-        signal: controller.signal
-      });
-      clearTimeout(id);
-      if(!res.ok) throw new Error("Bad response");
-      const j = await res.json();
-      // beklenen format: { reply: "..." } veya { choices: [...] } -- esnek al
-      if(j.reply) return j.reply;
-      if(j.choices && j.choices[0] && j.choices[0].message) return j.choices[0].message.content;
-      if(j.choices && j.choices[0] && j.choices[0].text) return j.choices[0].text;
-      return null;
-    } catch (e) {
-      console.log("Backend çağrısı başarısız:", e);
-      return null;
-    }
-  }
-
-  // ---------- Gönderme mantığı ----------
-  async function handleSend(){
+  function handleSend(){
     const txt = userInput.value.trim();
     if(!txt) return;
     addMessage(txt, "user");
     userInput.value = "";
-
-    // önce backend dene
-    const backendReply = await tryBackend(txt, 1500); // 1.5s timeout
-    if(backendReply){
-      addMessage(backendReply, "bot");
-      return;
-    }
-
-    // backend yoksa veya hata -> yerel cevap
-    const local = botReplyLocal(txt);
-    // küçük gecikme ile doğal his ver
-    setTimeout(() => addMessage(local, "bot"), 700 + Math.random()*800);
+    setTimeout(()=> addMessage(botReply(txt), "bot"), 600);
   }
 
-  // ---------- Eventler ----------
   sendBtn.addEventListener("click", handleSend);
-  userInput.addEventListener("keydown", (e) => { if(e.key === "Enter") handleSend(); });
+  userInput.addEventListener("keydown", e => { if(e.key==="Enter") handleSend(); });
 
-  // ---------- Müzik: sessiz başlat, kısa sonra sesi aç ----------
-  window.addEventListener("load", () => {
-    if(music){
-      music.volume = 0;
-      const p = music.play();
-      if(p && p.catch) {
-        p.then(()=> {
-          setTimeout(()=> { music.volume = 0.45; }, 900);
-        }).catch(err => {
-          console.log("Autoplay engellendi:", err, "— sayfaya bir tıklama ile müziği başlatabilirsiniz.");
-        });
-      }
-    }
-  });
-
-  // Eğer autoplay engelleniyorsa: ilk kullanıcı tıklamasında zorla çal
+  // Müzik başlatma (ilk tıklamada çalışır)
   window.addEventListener("click", () => {
     if(music && music.paused){
-      music.play().then(()=> { music.volume = 0.45; }).catch(()=>{});
+      music.play().then(()=>{ music.volume = 0.5; }).catch(()=>{});
     }
   });
-
-  // ---------- Diagnostic: konsolda durum göster ----------
-  console.log("Elif bot frontend aktif. Backend endpoint: http://localhost:3000/chat");
   </script>
 </body>
 </html>
