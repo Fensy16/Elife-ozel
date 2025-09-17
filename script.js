@@ -29,3 +29,10 @@ nextBtn.addEventListener("click", () => {
     nextBtn.innerText = "💜 Sohbet bitti";
   }
 });
+const music = document.getElementById("bg-music");
+const musicBtn = document.getElementById("play-music");
+
+musicBtn.addEventListener("click", () => {
+  music.play();
+  musicBtn.style.display = "none"; // buton gizlenir
+});
