@@ -3,25 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Elif için</title>
+  <title>Elif için 🌹</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <header>
-    <h1>Elif, Bu Senin İçin 🌹</h1>
+    <h1>Elif, Bu Senin İçin 💜</h1>
     <p>Karanlık bile olsa ışığım sensin.</p>
   </header>
 
   <!-- Chat kutusu -->
   <section class="chat">
-    <div id="chat-box">
-      <div class="bot-message">Merhaba Elif 💜 Nasılsın bugün?</div>
-    </div>
-    <button id="next-btn">Soruyu Göster</button>
+    <div id="chat-box"></div>
+    <input type="text" id="user-input" placeholder="Mesajını yaz Elif...">
+    <button id="send-btn">Gönder</button>
   </section>
 
   <!-- Arka planda müzik -->
-  <audio autoplay loop hidden>
+  <audio id="bg-music" autoplay loop>
     <source src="plot-twins.mp3" type="audio/mpeg">
   </audio>
 
@@ -30,19 +29,24 @@
   </footer>
 
   <script src="script.js"></script>
+  <script>
+    // Müzik sessiz başlasın, sonra sesi açılsın
+    window.addEventListener("load", () => {
+      const music = document.getElementById("bg-music");
+      if (music) {
+        music.volume = 0;        
+        const playPromise = music.play();
+        if (playPromise !== undefined) {
+          playPromise.then(() => {
+            setTimeout(() => {
+              music.volume = 0.5;  // 1 saniye sonra sesi aç
+            }, 1000);
+          }).catch(err => {
+            console.log("Müzik otomatik başlamadı:", err);
+          });
+        }
+      }
+    });
+  </script>
 </body>
 </html>
-<iframe width="0" height="0" 
-  src="https://www.youtube.com/embed/YOUTUBE_ID?autoplay=1&loop=1&playlist=YOUTUBE_ID" 
-  frameborder="0" allow="autoplay">
-</iframe>
-<audio id="bg-music" loop>
-  <source src="plot-twins.mp3" type="audio/mpeg">
-</audio>
-
-<button id="play-music">🎶 Müziği Başlat</button>
-<section class="chat">
-  <div id="chat-box"></div>
-  <input type="text" id="user-input" placeholder="Mesajını yaz Elif...">
-  <button id="send-btn">Gönder</button>
-</section>
