@@ -40,19 +40,16 @@
       border-radius: 15px;
       max-width: 75%;
       line-height: 1.4em;
-      position: relative;
     }
     .user {
       background: linear-gradient(135deg, #ff80bf, #ff4da6);
       align-self: flex-end;
       border-bottom-right-radius: 0;
-      box-shadow: 0 0 8px rgba(255, 128, 191, 0.6);
     }
     .bot {
       background: linear-gradient(135deg, #80dfff, #3399ff);
       align-self: flex-start;
       border-bottom-left-radius: 0;
-      box-shadow: 0 0 8px rgba(128, 223, 255, 0.6);
     }
     .input-container {
       display: flex;
@@ -78,10 +75,6 @@
       color: white;
       font-weight: bold;
       cursor: pointer;
-      border-radius: 0 0 15px 0;
-    }
-    button:hover {
-      background: linear-gradient(135deg, #ff85c1, #ff4db8);
     }
   </style>
 </head>
@@ -111,7 +104,23 @@
         });
 
         const data = await response.json();
+
+        // Bot cevabı
         addMessage("🦋 " + (data.reply || "Cevap alınamadı"), "bot");
+
+        // Botun sorusu (rastgele seçilebilir)
+        const botQuestions = [
+          "🌸 Peki sen bugün nasılsın?",
+          "🦋 Şu an ne yapıyorsun?",
+          "🌹 En sevdiğin renk nedir?",
+          "🌼 Bugün seni mutlu eden bir şey oldu mu?",
+          "🦋 Bir dilek hakkın olsa ne dilerdin?"
+        ];
+        const randomQ = botQuestions[Math.floor(Math.random() * botQuestions.length)];
+        setTimeout(() => {
+          addMessage(randomQ, "bot");
+        }, 1200);
+
       } catch (error) {
         addMessage("⚠️ Hata: Backend'e ulaşılamadı", "bot");
       }
