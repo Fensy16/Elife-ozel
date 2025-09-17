@@ -6,7 +6,7 @@ import OpenAI from "openai";
 
 dotenv.config();
 const app = express();
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 5050;
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -16,30 +16,22 @@ const openai = new OpenAI({
 });
 
 app.post("/chat", async (req, res) => {
-  const userMessage = req.body.message || "";
-
   try {
+    const userMessage = req.body.message;
+
     const completion = await openai.chat.completions.create({
-      model: "gpt-4o-mini",
-      messages: [
-        {
-          role: "system",
-          content: `Sen Elif ile konuşan kibar, romantik bir asistansın. 
-Cevapların kısa, samimi, tatlı olsun. 
-Her cevabının SONUNDA Elif'e küçük bir soru sor. 🌹🦋`,
-        },
-        { role: "user", content: userMessage },
-      ],
+      model: "gpt-3.5-turbo",
+      messages: [{ role: "user", content: userMessage }],
     });
 
     const reply = completion.choices[0].message.content;
     res.json({ reply });
-  } catch (err) {
-    console.error("API Hatası:", err);
-    res.status(500).json({ reply: "⚠️ Sunucuda bir sorun oldu." });
+  } catch (error) {
+    console.error("OpenAI Hatası:", error);
+    res.status(500).json({ reply: "Bir hata oluştu 😢" });
   }
 });
 
 app.listen(port, () => {
-  console.log(`✅ Backend http://localhost:${port} adresinde çalışıyor`);
+  console.log(`✅ Server ${port} portunda çalışıyor`);
 });
