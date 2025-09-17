@@ -3,183 +3,113 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Elif için 🌹</title>
+  <title>Elif Bot 🌹</title>
   <style>
     body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to right, #ffdde1, #ee9ca7);
       margin: 0;
-      font-family: Georgia, serif;
-      background: linear-gradient(135deg, #0d0d0d, #1a001a);
-      color: #f2f2f2;
-      text-align: center;
-      background-image: url("https://png.pngtree.com/thumb_back/fh260/background/20230527/pngtree-purple-roses-background-with-butterflies-image_2693663.jpg");
-      background-size: cover;
-      background-position: center;
+      padding: 0;
     }
-    header {
-      padding: 20px;
-      border-bottom: 1px solid #222;
-      background: rgba(0,0,0,0.5);
-    }
-    .chat {
-      margin: 20px auto;
-      max-width: 700px;
-      background: rgba(20, 18, 20, 0.9);
-      padding: 16px;
-      border-radius: 12px;
-      box-shadow: 0 0 25px #660066;
-      display: none;
-    }
-    #chat-box {
-      height: 360px;
-      overflow-y: auto;
-      background: #0b0b0b;
-      padding: 12px;
-      border-radius: 6px;
-      text-align: left;
-    }
-    .bot-message {
-      background: #3a003a;
-      color: #fff;
-      padding: 10px;
-      margin: 8px 0;
-      border-radius: 10px;
-      max-width: 80%;
-    }
-    .user-message {
-      background: #552255;
-      color: #fff;
-      padding: 10px;
-      margin: 8px 0;
-      border-radius: 10px;
-      max-width: 80%;
-      margin-left: auto;
-    }
-    #controls {
+    .chat-container {
+      width: 400px;
+      max-width: 90%;
+      margin: 50px auto;
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0px 4px 10px rgba(0,0,0,0.2);
+      overflow: hidden;
       display: flex;
-      gap: 8px;
-      margin-top: 12px;
-      justify-content: center;
+      flex-direction: column;
     }
-    #user-input {
-      flex: 1;
+    .chat-box {
+      padding: 15px;
+      height: 400px;
+      overflow-y: auto;
+    }
+    .chat-message {
+      margin: 10px 0;
       padding: 10px;
-      border-radius: 6px;
+      border-radius: 10px;
+      max-width: 70%;
+    }
+    .user {
+      background: #d1e7ff;
+      align-self: flex-end;
+    }
+    .bot {
+      background: #ffe4ec;
+      align-self: flex-start;
+    }
+    .input-container {
+      display: flex;
+      border-top: 1px solid #ccc;
+    }
+    input {
+      flex: 1;
       border: none;
+      padding: 10px;
+      font-size: 16px;
       outline: none;
-      min-width: 0;
     }
-    #send-btn {
-      padding: 10px 16px;
-      border-radius: 6px;
+    button {
       border: none;
-      background: #880088;
-      color: #fff;
+      background: #ff5f7e;
+      color: white;
+      padding: 10px 20px;
       cursor: pointer;
-      font-weight: bold;
+      font-size: 16px;
     }
-    #send-btn:active {
-      transform: translateY(1px);
-    }
-    #start-btn {
-      margin-top: 50px;
-      padding: 18px 32px;
-      font-size: 18px;
-      border: none;
-      border-radius: 12px;
-      background: #ff33cc;
-      color: #fff;
-      cursor: pointer;
-      box-shadow: 0 0 20px #ff66cc;
-    }
-    #start-btn:hover {
-      background: #ff66cc;
-    }
-    footer {
-      padding: 14px;
-      color: #ddd;
-      background: rgba(0,0,0,0.4);
-      margin-top: 20px;
+    button:hover {
+      background: #ff3b61;
     }
   </style>
 </head>
 <body>
-  <header>
-    <h1>Elif, Sen Benim En Güzel Çiçeğimsin 🌹🦋</h1>
-    <p>Karanlık bile olsa ışığım sensin.</p>
-  </header>
-
-  <!-- Başlat butonu -->
-  <button id="start-btn">🌹 Başlat 🌹</button>
-
-  <!-- Sohbet kutusu -->
-  <section class="chat" id="chat-section">
-    <div id="chat-box">
-      <div class="bot-message">Merhaba Elif 💜 Nasılsın bugün?</div>
+  <div class="chat-container">
+    <div class="chat-box" id="chatBox"></div>
+    <div class="input-container">
+      <input type="text" id="userInput" placeholder="Mesajını yaz..." />
+      <button onclick="sendMessage()">Gönder</button>
     </div>
-    <div id="controls">
-      <input id="user-input" type="text" placeholder="Mesajını yaz Elif..." autocomplete="off" />
-      <button id="send-btn">Gönder</button>
-    </div>
-  </section>
-
-  <!-- Müzik -->
-  <audio id="bg-music" loop>
-    <source src="plot-twins.mp3" type="audio/mpeg" />
-  </audio>
-
-  <footer>
-    <p>© 2025 Senin için, Fensy</p>
-  </footer>
+  </div>
 
   <script>
-    const chatSection = document.getElementById("chat-section");
-    const chatBox = document.getElementById("chat-box");
-    const userInput = document.getElementById("user-input");
-    const sendBtn = document.getElementById("send-btn");
-    const startBtn = document.getElementById("start-btn");
-    const music = document.getElementById("bg-music");
+    async function sendMessage() {
+      const input = document.getElementById("userInput");
+      const chatBox = document.getElementById("chatBox");
+      const message = input.value.trim();
+      if (!message) return;
 
-    function addMessage(text, sender){
-      const d = document.createElement("div");
-      d.className = sender === "user" ? "user-message" : "bot-message";
-      d.innerText = text;
-      chatBox.appendChild(d);
-      chatBox.scrollTop = chatBox.scrollHeight;
-    }
+      // Kullanıcı mesajını ekle
+      const userMsg = document.createElement("div");
+      userMsg.className = "chat-message user";
+      userMsg.innerText = message;
+      chatBox.appendChild(userMsg);
 
-    async function handleSend(){
-      const txt = userInput.value.trim();
-      if(!txt) return;
-      addMessage(txt, "user");
-      userInput.value = "";
+      input.value = "";
 
+      // Render backend'e istek at
       try {
         const res = await fetch("https://bot-backend-moqd.onrender.com/chat", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ message: txt })
+          body: JSON.stringify({ message }),
         });
+
         const data = await res.json();
-        if(data.reply){
-          addMessage(data.reply, "bot");
-        } else {
-          addMessage("⚠️ Cevap alınamadı...", "bot");
-        }
+
+        // Bot cevabını ekle
+        const botMsg = document.createElement("div");
+        botMsg.className = "chat-message bot";
+        botMsg.innerText = data.reply;
+        chatBox.appendChild(botMsg);
+
+        chatBox.scrollTop = chatBox.scrollHeight;
       } catch (err) {
         console.error("Hata:", err);
-        addMessage("⚠️ Sunucuya ulaşılamadı...", "bot");
       }
     }
-
-    sendBtn.addEventListener("click", handleSend);
-    userInput.addEventListener("keydown", e => { if(e.key==="Enter") handleSend(); });
-
-    // Başlat butonu
-    startBtn.addEventListener("click", () => {
-      startBtn.style.display = "none";
-      chatSection.style.display = "block";
-      music.play().then(()=>{ music.volume = 0.5; }).catch(()=>{});
-    });
   </script>
 </body>
 </html>
