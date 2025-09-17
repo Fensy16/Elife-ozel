@@ -22,7 +22,7 @@
 </head>
 <body>
   <header>
-    <h1>Elif Bende Yerin Bi farklı  💜</h1>
+    <h1>Elif Bende Yerin Bi farklı 💜</h1>
     <p>Karanlık bile olsa ışığım sensin.</p>
   </header>
 
@@ -65,22 +65,23 @@
     chatBox.scrollTop = chatBox.scrollHeight;
   }
 
-  function botReply(userText){
-    const t = userText.toLowerCase();
-    if(t.includes("nasılsın")) return "Ben iyiyim çünkü seninle konuşuyorum 💜 Sen nasılsın Elif?";
-    if(t.includes("özledim")) return "Ben de seni çok özledim... her an aklımdasın 🌹";
-    if(t.includes("seviyor musun")) return "Seni seviyorum Elif, kalbim sana ait 💜";
-    if(t.includes("günaydın")) return "Günaydın meleğim ☀️ Senin gülüşün tüm günümü aydınlatıyor.";
-    if(t.includes("iyi geceler")) return "Tatlı rüyalar Elif 🌙 Seni rüyamda görmek isterim.";
-    return "Seninle konuşmak bana huzur veriyor Elif 💫";
-  }
-
-  function handleSend(){
+  async function handleSend(){
     const txt = userInput.value.trim();
     if(!txt) return;
     addMessage(txt, "user");
     userInput.value = "";
-    setTimeout(()=> addMessage(botReply(txt), "bot"), 600);
+
+    try {
+      const res = await fetch("https://bot-backend-moqd.onrender.com/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: txt })
+      });
+      const data = await res.json();
+      addMessage(data.reply, "bot");
+    } catch (err) {
+      addMessage("⚠️ Bağlantı hatası! Backend çalışıyor mu?", "bot");
+    }
   }
 
   sendBtn.addEventListener("click", handleSend);
