@@ -6,7 +6,7 @@ import OpenAI from "openai";
 
 dotenv.config();
 const app = express();
-const port = process.env.PORT || 5050;
+const port = process.env.PORT || 6060;
 
 app.use(cors());
 app.use(bodyParser.json());
