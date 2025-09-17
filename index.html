@@ -12,14 +12,14 @@
     <p>Karanlık bile olsa ışığım sensin.</p>
   </header>
 
-  <!-- Chat kutusu -->
+  <!-- Sohbet kutusu -->
   <section class="chat">
     <div id="chat-box"></div>
     <input type="text" id="user-input" placeholder="Mesajını yaz Elif...">
     <button id="send-btn">Gönder</button>
   </section>
 
-  <!-- Arka planda müzik -->
+  <!-- Müzik -->
   <audio id="bg-music" autoplay loop>
     <source src="plot-twins.mp3" type="audio/mpeg">
   </audio>
@@ -27,7 +27,6 @@
   <footer>
     <p>© 2025 Senin için, Fensy</p>
   </footer>
-
   <!-- 🎵 Müzik kodu buraya -->
   <audio id="bg-music" autoplay loop>
     <source src="plot-twins.mp3" type="audio/mpeg">
@@ -35,58 +34,50 @@
 
   <script src="script.js"></script>
 </body>
-</html>
-  <script src="script.js"></script>
+</html> 
+
+  <!-- Sohbet kodu -->
   <script>
-    // Müzik sessiz başlasın, sonra sesi açılsın
-    window.addEventListener("load", () => {
+    const chatBox = document.getElementById("chat-box");
+    const userInput = document.getElementById("user-input");
+    const sendBtn = document.getElementById("send-btn");
+
+    function addMessage(text, sender) {
+      const msg = document.createElement("div");
+      msg.classList.add(sender === "user" ? "user-message" : "bot-message");
+      msg.innerText = text;
+      chatBox.appendChild(msg);
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    sendBtn.addEventListener("click", async () => {
+      const text = userInput.value.trim();
+      if (text === "") return;
+
+      addMessage(text, "user");
+      userInput.value = "";
+
+      try {
+        const res = await fetch("http://localhost:3000/chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message: text })
+        });
+
+        const data = await res.json();
+        addMessage(data.reply, "bot");
+      } catch (err) {
+        addMessage("⚠️ Bağlantı hatası, server çalışıyor mu?", "bot");
+      }
+    });
+
+    // Chrome'da müziğin başlaması için ilk tıklamada play
+    window.addEventListener("click", () => {
       const music = document.getElementById("bg-music");
       if (music) {
-        music.volume = 0;        
-        const playPromise = music.play();
-        if (playPromise !== undefined) {
-          playPromise.then(() => {
-            setTimeout(() => {
-              music.volume = 0.5;  // 1 saniye sonra sesi aç
-            }, 1000);
-          }).catch(err => {
-            console.log("Müzik otomatik başlamadı:", err);
-          });
-        }
+        music.play().catch(err => console.log("Müzik başlamadı:", err));
       }
     });
   </script>
 </body>
 </html>
-const chatBox = document.getElementById("chat-box");
-const userInput = document.getElementById("user-input");
-const sendBtn = document.getElementById("send-btn");
-
-function addMessage(text, sender) {
-  const msg = document.createElement("div");
-  msg.classList.add(sender === "user" ? "user-message" : "bot-message");
-  msg.innerText = text;
-  chatBox.appendChild(msg);
-  chatBox.scrollTop = chatBox.scrollHeight;
-}
-
-sendBtn.addEventListener("click", async () => {
-  const text = userInput.value.trim();
-  if (text === "") return;
-
-  addMessage(text, "user");
-  userInput.value = "";
-
-  try {
-    const res = await fetch("http://localhost:3000/chat", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ message: text })
-    });
-
-    const data = await res.json();
-    addMessage(data.reply, "bot");
-  } catch (err) {
-    addMessage("⚠️ Bağlantı hatası, server çalışıyor mu?", "bot");
-  }
-});
