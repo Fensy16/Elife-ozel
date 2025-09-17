@@ -1,155 +1,195 @@
+Bunu ayrı bir klasörde (örneğin frontend/) koyabilirsin.
+
+index.html
 <!DOCTYPE html>
 <html lang="tr">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Elif Bot 🌸🦋</title>
+  <title>Elif için 🌹</title>
   <style>
     body {
       margin: 0;
-      font-family: 'Comic Sans MS', cursive, sans-serif;
-      background: linear-gradient(135deg, #ffdde1, #ee9ca7);
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .chat-container {
-      width: 90%;
-      max-width: 500px;
-      height: 80vh;
-      background: rgba(255, 255, 255, 0.85);
-      border-radius: 20px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      backdrop-filter: blur(6px);
-      border: 2px solid pink;
-    }
-
-    .chat-header {
-      padding: 15px;
+      font-family: Georgia, serif;
+      background: linear-gradient(to bottom, #0d0d0d, #1a001a);
+      color: #f2f2f2;
       text-align: center;
-      background: #ffb6c1;
-      font-size: 20px;
-      font-weight: bold;
-      color: #fff;
-      border-bottom: 2px solid #f08080;
     }
-
-    .chat-messages {
-      flex: 1;
-      padding: 15px;
+    header {
+      padding: 20px;
+      border-bottom: 1px solid #222;
+    }
+    .chat {
+      margin: 20px auto;
+      max-width: 700px;
+      background: rgba(20, 18, 20, 0.9);
+      padding: 16px;
+      border-radius: 12px;
+      box-shadow: 0 0 20px #660066;
+      display: none;
+      position: relative;
+      overflow: hidden;
+    }
+    #chat-box {
+      height: 360px;
       overflow-y: auto;
+      background: #0b0b0b;
+      padding: 12px;
+      border-radius: 6px;
+      text-align: left;
     }
-
-    .msg {
-      margin: 10px 0;
-      padding: 10px 15px;
-      border-radius: 20px;
-      max-width: 75%;
-      clear: both;
-    }
-
-    .msg.user {
-      background: #ff69b4;
-      color: white;
-      float: right;
-      text-align: right;
-    }
-
-    .msg.bot {
-      background: #fff0f5;
-      color: #333;
-      float: left;
-      border: 1px solid #ffb6c1;
-    }
-
-    .chat-input {
-      display: flex;
+    .bot-message {
+      background: #3a003a;
+      color: #fff;
       padding: 10px;
-      border-top: 2px solid #f08080;
-      background: #ffe4e1;
+      margin: 8px 0;
+      border-radius: 10px;
+      max-width: 80%;
     }
-
-    .chat-input input {
+    .user-message {
+      background: #552255;
+      color: #fff;
+      padding: 10px;
+      margin: 8px 0;
+      border-radius: 10px;
+      max-width: 80%;
+      margin-left: auto;
+    }
+    #controls {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+      justify-content: center;
+    }
+    #user-input {
       flex: 1;
       padding: 10px;
+      border-radius: 6px;
       border: none;
-      border-radius: 20px;
       outline: none;
-      margin-right: 10px;
+      min-width: 0;
     }
-
-    .chat-input button {
-      padding: 10px 15px;
+    #send-btn {
+      padding: 10px 16px;
+      border-radius: 6px;
       border: none;
-      background: #ff69b4;
-      color: white;
-      font-weight: bold;
-      border-radius: 20px;
+      background: #660066;
+      color: #fff;
       cursor: pointer;
     }
-
-    .chat-input button:hover {
-      background: #ff1493;
+    #send-btn:active {
+      transform: translateY(1px);
+    }
+    footer {
+      padding: 14px;
+      color: #999;
+    }
+    #start-btn {
+      margin-top: 50px;
+      padding: 18px 32px;
+      font-size: 18px;
+      border: none;
+      border-radius: 10px;
+      background: #660066;
+      color: #fff;
+      cursor: pointer;
+      box-shadow: 0 0 15px #330033;
+    }
+    #start-btn:hover {
+      background: #880088;
     }
 
-    /* Emoji dekorasyon */
-    .chat-header::after {
-      content: " 🌸🦋🌹";
+    /* Arka plan süslemeleri (çiçekler, güller, kelebekler) */
+    body::before {
+      content: "🌹 🦋 🌸 🌺 🌼";
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      font-size: 28px;
+      opacity: 0.7;
+    }
+    body::after {
+      content: "🌷 🦋 🌹 🌸 🦋";
+      position: fixed;
+      bottom: 10px;
+      left: 10px;
+      font-size: 28px;
+      opacity: 0.7;
     }
   </style>
 </head>
 <body>
-  <div class="chat-container">
-    <div class="chat-header">Elif Bot</div>
-    <div class="chat-messages" id="chat"></div>
-    <div class="chat-input">
-      <input id="msg" type="text" placeholder="Mesajını yaz...">
-      <button onclick="sendMsg()">Gönder</button>
+  <header>
+    <h1>Elif 💜</h1>
+    <p>Karanlık bile olsa ışığım sensin.</p>
+  </header>
+
+  <!-- Başlat butonu -->
+  <button id="start-btn">🌹 Sohbeti Başlat 🌹</button>
+
+  <!-- Sohbet kutusu -->
+  <section class="chat" id="chat-section">
+    <div id="chat-box">
+      <div class="bot-message">Merhaba Elif 💜 Nasılsın bugün?</div>
     </div>
-  </div>
+    <div id="controls">
+      <input id="user-input" type="text" placeholder="Mesajını yaz Elif..." autocomplete="off" />
+      <button id="send-btn">Gönder</button>
+    </div>
+  </section>
+
+  <!-- Müzik -->
+  <audio id="bg-music" loop>
+    <source src="plot-twins.mp3" type="audio/mpeg">
+  </audio>
+
+  <footer>
+    <p>© 2025 Senin için, Fensy</p>
+  </footer>
 
   <script>
-    async function sendMsg() {
-      const msgInput = document.getElementById("msg");
-      const chatBox = document.getElementById("chat");
-      const msg = msgInput.value.trim();
-      if (!msg) return;
+    const chatSection = document.getElementById("chat-section");
+    const chatBox = document.getElementById("chat-box");
+    const userInput = document.getElementById("user-input");
+    const sendBtn = document.getElementById("send-btn");
+    const startBtn = document.getElementById("start-btn");
+    const music = document.getElementById("bg-music");
 
-      // Kullanıcı mesajını ekle
-      chatBox.innerHTML += `<div class="msg user"> ${msg} </div>`;
+    function addMessage(text, sender){
+      const d = document.createElement("div");
+      d.className = sender === "user" ? "user-message" : "bot-message";
+      d.innerText = text;
+      chatBox.appendChild(d);
       chatBox.scrollTop = chatBox.scrollHeight;
-      msgInput.value = "";
+    }
+
+    async function handleSend(){
+      const txt = userInput.value.trim();
+      if(!txt) return;
+      addMessage(txt, "user");
+      userInput.value = "";
 
       try {
         const res = await fetch("https://bot-backend-moqd.onrender.com/chat", {
           method: "POST",
           headers: {"Content-Type":"application/json"},
-          body: JSON.stringify({ message: msg })
+          body: JSON.stringify({ message: txt })
         });
         const data = await res.json();
-
-        // Bot cevabı + ek soru
-        const botReply = data.reply || "Bunu tam anlayamadım 🌸";
-        const questions = [
-          "Peki sen bu konuda ne düşünüyorsun? 💭",
-          "Bu seni mutlu ediyor mu? 😊",
-          "Senin için özel olan bir anı var mı? 🌹",
-          "Biraz daha bahseder misin? 🦋",
-          "Kalbinden geçenleri paylaşmak ister misin? 💕"
-        ];
-        const randomQ = questions[Math.floor(Math.random() * questions.length)];
-
-        chatBox.innerHTML += `<div class="msg bot"> ${botReply} <br><i>${randomQ}</i></div>`;
-        chatBox.scrollTop = chatBox.scrollHeight;
+        addMessage(data.reply, "bot");
       } catch (e) {
-        chatBox.innerHTML += `<div class="msg bot" style="color:red;">Hata: ${e}</div>`;
+        addMessage("⚠️ Bağlantı hatası.", "bot");
       }
     }
+
+    sendBtn.addEventListener("click", handleSend);
+    userInput.addEventListener("keydown", e => { if(e.key==="Enter") handleSend(); });
+
+    startBtn.addEventListener("click", () => {
+      startBtn.style.display = "none";
+      chatSection.style.display = "block";
+      music.play().then(()=>{ music.volume = 0.5; }).catch(()=>{});
+    });
   </script>
 </body>
 </html>
