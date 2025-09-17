@@ -1,38 +1,30 @@
 const chatBox = document.getElementById("chat-box");
-const nextBtn = document.getElementById("next-btn");
+const userInput = document.getElementById("user-input");
+const sendBtn = document.getElementById("send-btn");
 
-const conversation = [
-  { bot: "Merhaba Elif 💜 Nasılsın bugün?", user: "Sen yanımdayken hep çok iyiyim 🌹" },
-  { bot: "Beni hatırladın mı?", user: "Seni unutmak mümkün mü? Her an aklımdasın 💫" },
-  { bot: "Bir dilek hakkın olsa ne dilerdin?", user: "Hayatımın geri kalanını seninle geçirmek ✨" },
-  { bot: "Sence ben özel miyim?", user: "Özel değil, eşsizsin Elif 💜" },
-  { bot: "Sonsuza kadar yanında olsam, mutlu olur musun?", user: "Benim en büyük mutluluğum bu olurdu 💍" }
-];
+function addMessage(text, sender) {
+  const msg = document.createElement("div");
+  msg.classList.add(sender === "user" ? "user-message" : "bot-message");
+  msg.innerText = text;
+  chatBox.appendChild(msg);
+  chatBox.scrollTop = chatBox.scrollHeight; // otomatik kaydır
+}
 
-let step = 0;
+sendBtn.addEventListener("click", () => {
+  const text = userInput.value.trim();
+  if (text === "") return;
+  
+  // Kullanıcı mesajını ekle
+  addMessage(text, "user");
+  userInput.value = "";
 
-nextBtn.addEventListener("click", () => {
-  if (step < conversation.length) {
-    const botMsg = document.createElement("div");
-    botMsg.classList.add("bot-message");
-    botMsg.innerText = conversation[step].bot;
+  // Basit bot cevapları
+  let reply = "Bunu duyduğuma çok sevindim Elif 💜";
+  if (text.includes("nasılsın")) reply = "Sen yanımda olunca hep çok iyiyim 🌹";
+  if (text.includes("seviyor musun")) reply = "Elbette, kalbim sadece sana ait 💫";
+  if (text.includes("özledin mi")) reply = "Her an seni özlüyorum Elif ✨";
 
-    const userMsg = document.createElement("div");
-    userMsg.classList.add("user-message");
-    userMsg.innerText = conversation[step].user;
-
-    chatBox.appendChild(botMsg);
-    chatBox.appendChild(userMsg);
-    step++;
-  } else {
-    nextBtn.disabled = true;
-    nextBtn.innerText = "💜 Sohbet bitti";
-  }
-});
-const music = document.getElementById("bg-music");
-const musicBtn = document.getElementById("play-music");
-
-musicBtn.addEventListener("click", () => {
-  music.play();
-  musicBtn.style.display = "none"; // buton gizlenir
+  setTimeout(() => {
+    addMessage(reply, "bot");
+  }, 1000);
 });
