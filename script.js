@@ -1,32 +1,40 @@
-const chatBox = document.getElementById("chat-box");
-const userInput = document.getElementById("user-input");
 const sendBtn = document.getElementById("send-btn");
+const userInput = document.getElementById("user-input");
+const chatBox = document.getElementById("chat-box");
 
-function addMessage(text, sender) {
-  const msg = document.createElement("div");
-  msg.classList.add(sender === "user" ? "user-message" : "bot-message");
-  msg.innerText = text;
-  chatBox.appendChild(msg);
-  chatBox.scrollTop = chatBox.scrollHeight; // otomatik kaydır
+// 👉 Backend URL'ni buraya yaz
+const API_URL = "https://fensy16-bot-backend.onrender.com/chat";
+
+function appendMessage(message, sender) {
+  const msgDiv = document.createElement("div");
+  msgDiv.className = sender === "user" ? "user-message" : "bot-message";
+  msgDiv.textContent = message;
+  chatBox.appendChild(msgDiv);
+  chatBox.scrollTop = chatBox.scrollHeight;
 }
 
-// Gönderme işlemi
-sendBtn.addEventListener("click", () => {
-  const text = userInput.value.trim();
-  if (text === "") return;
+async function sendMessage() {
+  const message = userInput.value.trim();
+  if (!message) return;
 
-  // Kullanıcı mesajını ekle
-  addMessage(text, "user");
+  appendMessage(message, "user");
   userInput.value = "";
 
-  // Basit bot cevapları
-  let reply = "Bunu duyduğuma çok sevindim Elif 💜";
-  if (text.toLowerCase().includes("nasılsın")) reply = "Sen yanımda olunca hep çok iyiyim 🌹";
-  if (text.toLowerCase().includes("seviyor musun")) reply = "Elbette, kalbim sadece sana ait 💫";
-  if (text.toLowerCase().includes("özledin mi")) reply = "Her an seni özlüyorum Elif ✨";
-  if (text.toLowerCase().includes("aşk")) reply = "Aşk benim için sensin Elif 💜";
+  try {
+    const res = await fetch(API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message }),
+    });
 
-  setTimeout(() => {
-    addMessage(reply, "bot");
-  }, 1000);
+    const data = await res.json();
+    appendMessage(data.reply, "bot");
+  } catch (error) {
+    appendMessage("⚠️ Sunucuya bağlanılamadı...", "bot");
+  }
+}
+
+sendBtn.addEventListener("click", sendMessage);
+userInput.addEventListener("keypress", (e) => {
+  if (e.key === "Enter") sendMessage();
 });
