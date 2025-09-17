@@ -3,136 +3,152 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Elif Chat Bot</title>
+  <title>Elif Bot 🌸🦋</title>
   <style>
     body {
+      margin: 0;
       font-family: 'Comic Sans MS', cursive, sans-serif;
-      background: url('https://i.ibb.co/4JdfjzX/flowers-butterflies-bg.jpg') no-repeat center center fixed;
-      background-size: cover;
-      color: #fff;
+      background: linear-gradient(135deg, #ffdde1, #ee9ca7);
+      min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
-      margin: 0;
     }
+
     .chat-container {
-      width: 420px;
-      max-width: 95%;
-      background: rgba(30, 30, 30, 0.85);
+      width: 90%;
+      max-width: 500px;
+      height: 80vh;
+      background: rgba(255, 255, 255, 0.85);
       border-radius: 20px;
-      box-shadow: 0 0 25px rgba(255, 105, 180, 0.7);
-      overflow: hidden;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
       display: flex;
       flex-direction: column;
-      height: 80vh;
-      border: 3px solid pink;
-      backdrop-filter: blur(8px);
+      overflow: hidden;
+      backdrop-filter: blur(6px);
+      border: 2px solid pink;
     }
-    .messages {
+
+    .chat-header {
+      padding: 15px;
+      text-align: center;
+      background: #ffb6c1;
+      font-size: 20px;
+      font-weight: bold;
+      color: #fff;
+      border-bottom: 2px solid #f08080;
+    }
+
+    .chat-messages {
       flex: 1;
       padding: 15px;
       overflow-y: auto;
     }
-    .message {
-      margin: 8px 0;
-      padding: 10px 14px;
-      border-radius: 15px;
+
+    .msg {
+      margin: 10px 0;
+      padding: 10px 15px;
+      border-radius: 20px;
       max-width: 75%;
-      line-height: 1.4em;
+      clear: both;
     }
-    .user {
-      background: linear-gradient(135deg, #ff80bf, #ff4da6);
-      align-self: flex-end;
-      border-bottom-right-radius: 0;
+
+    .msg.user {
+      background: #ff69b4;
+      color: white;
+      float: right;
+      text-align: right;
     }
-    .bot {
-      background: linear-gradient(135deg, #80dfff, #3399ff);
-      align-self: flex-start;
-      border-bottom-left-radius: 0;
+
+    .msg.bot {
+      background: #fff0f5;
+      color: #333;
+      float: left;
+      border: 1px solid #ffb6c1;
     }
-    .input-container {
+
+    .chat-input {
       display: flex;
-      border-top: 2px solid #ffb6c1;
-      background: rgba(255, 255, 255, 0.1);
+      padding: 10px;
+      border-top: 2px solid #f08080;
+      background: #ffe4e1;
     }
-    input {
+
+    .chat-input input {
       flex: 1;
-      padding: 12px;
+      padding: 10px;
       border: none;
+      border-radius: 20px;
       outline: none;
-      background: transparent;
-      color: #fff;
-      font-size: 15px;
+      margin-right: 10px;
     }
-    input::placeholder {
-      color: #ddd;
-    }
-    button {
-      padding: 12px 18px;
+
+    .chat-input button {
+      padding: 10px 15px;
       border: none;
-      background: linear-gradient(135deg, #ff66b2, #ff3399);
+      background: #ff69b4;
       color: white;
       font-weight: bold;
+      border-radius: 20px;
       cursor: pointer;
+    }
+
+    .chat-input button:hover {
+      background: #ff1493;
+    }
+
+    /* Emoji dekorasyon */
+    .chat-header::after {
+      content: " 🌸🦋🌹";
     }
   </style>
 </head>
 <body>
   <div class="chat-container">
-    <div class="messages" id="messages"></div>
-    <div class="input-container">
-      <input type="text" id="userInput" placeholder="🌸 Mesajınızı yazın..." />
-      <button onclick="sendMessage()">Gönder 🦋</button>
+    <div class="chat-header">Elif Bot</div>
+    <div class="chat-messages" id="chat"></div>
+    <div class="chat-input">
+      <input id="msg" type="text" placeholder="Mesajını yaz...">
+      <button onclick="sendMsg()">Gönder</button>
     </div>
   </div>
 
   <script>
-    async function sendMessage() {
-      const input = document.getElementById("userInput");
-      const message = input.value.trim();
-      if (!message) return;
+    async function sendMsg() {
+      const msgInput = document.getElementById("msg");
+      const chatBox = document.getElementById("chat");
+      const msg = msgInput.value.trim();
+      if (!msg) return;
 
-      addMessage("🌹 " + message, "user");
-      input.value = "";
+      // Kullanıcı mesajını ekle
+      chatBox.innerHTML += `<div class="msg user"> ${msg} </div>`;
+      chatBox.scrollTop = chatBox.scrollHeight;
+      msgInput.value = "";
 
       try {
-        const response = await fetch("https://bot-backend-moqd.onrender.com/chat", {
+        const res = await fetch("https://bot-backend-moqd.onrender.com/chat", {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ message })
+          headers: {"Content-Type":"application/json"},
+          body: JSON.stringify({ message: msg })
         });
+        const data = await res.json();
 
-        const data = await response.json();
-
-        // Bot cevabı
-        addMessage("🦋 " + (data.reply || "Cevap alınamadı"), "bot");
-
-        // Botun sorusu (rastgele seçilebilir)
-        const botQuestions = [
-          "🌸 Peki sen bugün nasılsın?",
-          "🦋 Şu an ne yapıyorsun?",
-          "🌹 En sevdiğin renk nedir?",
-          "🌼 Bugün seni mutlu eden bir şey oldu mu?",
-          "🦋 Bir dilek hakkın olsa ne dilerdin?"
+        // Bot cevabı + ek soru
+        const botReply = data.reply || "Bunu tam anlayamadım 🌸";
+        const questions = [
+          "Peki sen bu konuda ne düşünüyorsun? 💭",
+          "Bu seni mutlu ediyor mu? 😊",
+          "Senin için özel olan bir anı var mı? 🌹",
+          "Biraz daha bahseder misin? 🦋",
+          "Kalbinden geçenleri paylaşmak ister misin? 💕"
         ];
-        const randomQ = botQuestions[Math.floor(Math.random() * botQuestions.length)];
-        setTimeout(() => {
-          addMessage(randomQ, "bot");
-        }, 1200);
+        const randomQ = questions[Math.floor(Math.random() * questions.length)];
 
-      } catch (error) {
-        addMessage("⚠️ Hata: Backend'e ulaşılamadı", "bot");
+        chatBox.innerHTML += `<div class="msg bot"> ${botReply} <br><i>${randomQ}</i></div>`;
+        chatBox.scrollTop = chatBox.scrollHeight;
+      } catch (e) {
+        chatBox.innerHTML += `<div class="msg bot" style="color:red;">Hata: ${e}</div>`;
       }
-    }
-
-    function addMessage(text, sender) {
-      const messagesDiv = document.getElementById("messages");
-      const msgDiv = document.createElement("div");
-      msgDiv.classList.add("message", sender);
-      msgDiv.textContent = text;
-      messagesDiv.appendChild(msgDiv);
-      messagesDiv.scrollTop = messagesDiv.scrollHeight;
     }
   </script>
 </body>
