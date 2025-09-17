@@ -1,66 +1,81 @@
 body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #0f0f0f, #1a001a);
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
   margin: 0;
-  font-family: 'Georgia', serif;
-  background-color: #0d0d0d;
-  color: #f2f2f2;
-  text-align: center;
+  flex-direction: column;
 }
 
-header {
+.chat-container {
+  width: 500px;
+  max-width: 95%;
+  background: #000;
+  border-radius: 15px;
+  box-shadow: 0 0 25px 8px rgba(128, 0, 128, 0.6);
   padding: 20px;
-  border-bottom: 1px solid #333;
 }
 
-.chat {
-  margin: 20px auto;
-  max-width: 600px;
-  background: #1a1a1a;
-  padding: 15px;
-  border-radius: 10px;
-  box-shadow: 0 0 10px #550055;
-}
-
-#chat-box {
-  height: 300px;
+.chat-box {
+  height: 400px;
   overflow-y: auto;
   background: #111;
+  border-radius: 10px;
   padding: 10px;
-  border-radius: 5px;
-  text-align: left;
+  margin-bottom: 15px;
 }
 
 .bot-message {
-  background: #2e003e;
-  color: #fff;
-  padding: 8px;
-  margin: 5px;
+  background: #400040;
+  padding: 10px;
+  margin: 8px 0;
   border-radius: 10px;
-  max-width: 80%;
+  max-width: 75%;
 }
 
 .user-message {
-  background: #550055;
-  color: #fff;
-  padding: 8px;
-  margin: 5px;
+  background: #800080;
+  padding: 10px;
+  margin: 8px 0;
   border-radius: 10px;
   text-align: right;
+  max-width: 75%;
   margin-left: auto;
-  max-width: 80%;
+}
+
+.input-container {
+  display: flex;
+  gap: 10px;
 }
 
 #user-input {
-  width: 70%;
-  padding: 8px;
-  margin-top: 10px;
+  flex: 1;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  font-size: 16px;
 }
 
 #send-btn {
-  padding: 8px 15px;
-  margin-top: 10px;
-  background: #550055;
-  color: #fff;
+  background: purple;
   border: none;
-  border-radius: 5px;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 8px;
   cursor: pointer;
+  font-weight: bold;
+  transition: background 0.3s;
+}
+
+#send-btn:hover {
+  background: #a020f0;
+}
+
+footer {
+  margin-top: 10px;
+  font-size: 12px;
+  color: #aaa;
 }
