@@ -7,7 +7,7 @@
   <style>
     body {margin:0;font-family:Georgia,serif;background:#0d0d0d;color:#f2f2f2;text-align:center}
     header{padding:20px;border-bottom:1px solid #222}
-    .chat{margin:20px auto;max-width:700px;background:#141214;padding:16px;border-radius:10px;box-shadow:0 0 18px #330033}
+    .chat{margin:20px auto;max-width:700px;background:#141214;padding:16px;border-radius:10px;box-shadow:0 0 18px #330033;display:none}
     #chat-box{height:360px;overflow-y:auto;background:#0b0b0b;padding:12px;border-radius:6px;text-align:left}
     .bot-message{background:#3a003a;color:#fff;padding:10px;margin:8px 0;border-radius:10px;max-width:80%}
     .user-message{background:#552255;color:#fff;padding:10px;margin:8px 0;border-radius:10px;max-width:80%;margin-left:auto}
@@ -16,25 +16,28 @@
     #send-btn{padding:10px 16px;border-radius:6px;border:none;background:#660066;color:#fff;cursor:pointer}
     #send-btn:active{transform:translateY(1px)}
     footer{padding:14px;color:#999}
-    .muted-note{font-size:12px;color:#bba}
+    #start-btn{margin-top:50px;padding:18px 32px;font-size:18px;border:none;border-radius:10px;background:#660066;color:#fff;cursor:pointer;box-shadow:0 0 15px #330033}
+    #start-btn:hover{background:#880088}
   </style>
 </head>
 <body>
   <header>
-    <h1>Elif, Bu Senin İçin 💜</h1>
+    <h1>Elif Bende Yerin Bi farklı  💜</h1>
     <p>Karanlık bile olsa ışığım sensin.</p>
   </header>
 
-  <section class="chat">
+  <!-- Başlat butonu -->
+  <button id="start-btn">🌹 Başlat 🌹</button>
+
+  <!-- Sohbet kutusu -->
+  <section class="chat" id="chat-section">
     <div id="chat-box">
       <div class="bot-message">Merhaba Elif 💜 Nasılsın bugün?</div>
     </div>
-
     <div id="controls">
       <input id="user-input" type="text" placeholder="Mesajını yaz Elif..." autocomplete="off" />
       <button id="send-btn">Gönder</button>
     </div>
-    <div class="muted-note">(Müzik başlamazsa sayfaya bir kere tıkla 🎵)</div>
   </section>
 
   <!-- Müzik -->
@@ -47,9 +50,11 @@
   </footer>
 
   <script>
+  const chatSection = document.getElementById("chat-section");
   const chatBox = document.getElementById("chat-box");
   const userInput = document.getElementById("user-input");
   const sendBtn = document.getElementById("send-btn");
+  const startBtn = document.getElementById("start-btn");
   const music = document.getElementById("bg-music");
 
   function addMessage(text, sender){
@@ -60,7 +65,6 @@
     chatBox.scrollTop = chatBox.scrollHeight;
   }
 
-  // Basit kelime eşleştirme
   function botReply(userText){
     const t = userText.toLowerCase();
     if(t.includes("nasılsın")) return "Ben iyiyim çünkü seninle konuşuyorum 💜 Sen nasılsın Elif?";
@@ -82,11 +86,11 @@
   sendBtn.addEventListener("click", handleSend);
   userInput.addEventListener("keydown", e => { if(e.key==="Enter") handleSend(); });
 
-  // Müzik başlatma (ilk tıklamada çalışır)
-  window.addEventListener("click", () => {
-    if(music && music.paused){
-      music.play().then(()=>{ music.volume = 0.5; }).catch(()=>{});
-    }
+  // Başlat butonuna tıklandığında sohbet açılır + müzik çalar
+  startBtn.addEventListener("click", () => {
+    startBtn.style.display = "none";
+    chatSection.style.display = "block";
+    music.play().then(()=>{ music.volume = 0.5; }).catch(()=>{});
   });
   </script>
 </body>
